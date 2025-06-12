@@ -4,14 +4,13 @@ import com.anonysoul.embymand.common.BusinessException
 import com.anonysoul.embymand.emby.api.EmbyBaseService
 import com.anonysoul.embymand.emby.api.EmbyUserService
 import embyclient.ApiException
-import embyclient.Configuration
-import embyclient.Pair
 import embyclient.api.UserServiceApi
 import embyclient.model.CreateUserByName
 import embyclient.model.UpdateUserPassword
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import kotlin.concurrent.thread
 
 @Service
 class EmbyUserServiceImpl(
@@ -35,11 +34,13 @@ class EmbyUserServiceImpl(
             val user = userServiceApi.postUsersNew(createUserRequest)
             val newPassword = password ?: randomString(defaultPasswordLength)
             updateUserPassword(user.id, newPassword)
-            logger.info("成功创建 emby 账户 [user: ${user.name} password: $password]")
+            logger.info("成功创建 emby 账户 [id: ${user.id} user: ${user.name} password: $password]")
         } catch (e: ApiException) {
-            val usernameExists = usernameExistsRegex.matches(e.responseBody)
-            if (usernameExists) {
-                throw BusinessException("此用户名已存在")
+            if (e.responseBody != null) {
+                val usernameExists = usernameExistsRegex.matches(e.responseBody)
+                if (usernameExists) {
+                    throw BusinessException("此用户名已存在")
+                }
             }
             logger.error("创建用户失败：${e.responseBody}")
         }
@@ -61,8 +62,23 @@ class EmbyUserServiceImpl(
         userServiceApi.deleteUsersById(userId)
     }
 
+    init {
+        thread {
+            while (true) {
+                Thread.sleep(3000)
+                try {
+//                    createUser("zhangwu", "123456")
+                    var userId = "f34c6ea3a9a84a4eb0a61d34a0da2ea4"
+                    xxxxx(userId)
+                } catch (e: Exception) {
+                    logger.info("")
+                }
+            }
+        }
+    }
+
     fun xxxxx(userId: String) {
-        val sql = "SELECT DeviceName,ClientName, RemoteAddress FROM PlaybackActivity WHERE UserId = '${userId}'"
+        val sql = "SELECT DeviceName,ClientName, RemoteAddress FROM PlaybackActivity WHERE UserId = '$userId'"
         customQuery(sql, true)
     }
 

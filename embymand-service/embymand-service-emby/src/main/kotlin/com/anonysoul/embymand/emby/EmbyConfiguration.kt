@@ -2,7 +2,6 @@ package com.anonysoul.embymand.emby
 
 import embyclient.ApiClient
 import embyclient.api.SessionsServiceApi
-import embyclient.api.UserNotificationsServiceApi
 import embyclient.api.UserServiceApi
 import embyclient.auth.ApiKeyAuth
 import org.springframework.beans.factory.annotation.Value
