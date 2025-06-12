@@ -1,0 +1,50 @@
+version: "2.3"
+services:
+  db:
+    image: postgres:${POSTGRESQL_VERSION}
+    container_name: embymand-postgresql
+    environment:
+      - TZ=Asia/Shanghai
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    shm_size: 1g
+    networks:
+      - embymand-network
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+  emby:
+    image: emby/embyserver
+    container_name: embymand-embyserver
+    environment:
+      - UID=1000
+      - GID=1000
+      - GIDLIST=1000
+    volumes:
+      - ./emby/config:/config # Configuration directory
+      - ./emby/tvshows:/mnt/share1 # Media directory
+      - ./emby/movies:/mnt/share2 # Media directory
+    networks:
+      - embymand-network
+    ports:
+      - 8096:8096 # HTTP port
+      - 8920:8920 # HTTPS port
+    restart: on-failure
+
+networks:
+  embymand-network:
+    driver: bridge
+    name: embymand-network

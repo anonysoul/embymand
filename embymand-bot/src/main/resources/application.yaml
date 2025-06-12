@@ -1,0 +1,47 @@
+logging:
+  file:
+    path: ./log/
+    name: ./log/output.log
+  level:
+    root: info
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DATABASE:embymand}
+    username: ${POSTGRES_USERNAME:embymand}
+    password: ${POSTGRES_PASSWORD:embypass}
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: false
+
+# telegram bot 配置信息
+bot:
+  identity:
+    creator: ${BOT_IDENTITY_CREATOR:1234567890}
+    token: ${BOT_IDENTITY_TOKEN:1234567890:abcdefghijklmnopqrstuvwxyz_12345678}
+    username: ${BOT_IDENTITY_USERNAME:embymand_bot}
+
+# 代理服务器配置
+proxy:
+  enabled: ${PROXY_ENABLE:false}
+  type: ${PROXY_TYPE:SOCKS}
+  host: ${PROXY_HOST:127.0.0.1}
+  port: ${PROXY_PORT:7890}
+
+# emby 服务器配置信息
+emby:
+  endpoint: ${EMBY_ENDPOINT:http://localhost:8096/emby}
+  api-key: ${EMBY_APIKEY:1234567890abcdefghijklmnopqrstuv}
+  user:
+    default-password-length: 6
+  client:
+    prevent:
+      - "none"
+
+search:
+  page:
+    size: 10

@@ -1,0 +1,18 @@
+rootProject.name = "embymand"
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+include("embymand-bot")
+
+include("embymand-core:embymand-user")
+
+include("embymand-infra:embymand-database")
+include("embymand-infra:telegram-bot")
+
+include("embymand-service:embymand-service-common")
+include("embymand-service:embymand-service-emby")
+include("embymand-service:embymand-service-user")
