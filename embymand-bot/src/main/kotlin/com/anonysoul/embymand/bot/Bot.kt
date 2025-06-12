@@ -1,15 +1,11 @@
 package com.anonysoul.embymand.bot
 
-import com.anonysoul.embymand.user.RoleTO
-import com.anonysoul.embymand.user.UserCreateInputTO
-import com.anonysoul.embymand.user.UserService
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.UpdatesListener
 import com.pengrad.telegrambot.model.BotCommand
 import com.pengrad.telegrambot.model.botcommandscope.BotCommandsScopeChat
 import com.pengrad.telegrambot.request.SendMessage
 import com.pengrad.telegrambot.request.SetMyCommands
-import jakarta.annotation.PostConstruct
 import jakarta.validation.ValidatorFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.domain.EntityScan

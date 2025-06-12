@@ -35,7 +35,10 @@ internal class UserServiceImpl(
         return userTOMapper.map(user)
     }
 
-    override fun updateUser(id: Long, userUpdateInputTO: UserUpdateInputTO): UserTO {
+    override fun updateUser(
+        id: Long,
+        userUpdateInputTO: UserUpdateInputTO,
+    ): UserTO {
         val user = userRepository.findById(id) ?: throw RuntimeException("用户不存在")
         val role = userTOMapper.map(userUpdateInputTO.role)
         user.changeRole(role)

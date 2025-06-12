@@ -16,7 +16,10 @@ abstract class BaseConsumer(
         private val logger = LoggerFactory.getLogger(this::class.java)
     }
 
-    fun deleteMessage(chatId: Long, messageId: Int) {
+    fun deleteMessage(
+        chatId: Long,
+        messageId: Int,
+    ) {
         val request = DeleteMessage(chatId, messageId)
         bot.execute(request)
     }

@@ -2,7 +2,6 @@ package com.anonysoul.embymand.user
 
 import jakarta.validation.Valid
 import org.springframework.validation.annotation.Validated
-import java.io.InputStream
 
 @Validated
 interface UserService {

@@ -12,7 +12,6 @@ import com.pengrad.telegrambot.model.botcommandscope.BotCommandsScopeChat
 import com.pengrad.telegrambot.model.request.ParseMode
 import com.pengrad.telegrambot.request.SendMessage
 import com.pengrad.telegrambot.request.SetMyCommands
-import com.pengrad.telegrambot.response.SendResponse
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 import org.telegram.bot.BotProperties
@@ -48,53 +47,58 @@ class EnabledConsumer(
     /**
      * 系统管理员可使用的命令
      */
-    val systemAdminCommands = arrayOf(
-        BotCommand("start", "开始"),
-        BotCommand("settings", "设置"),
-    )
+    val systemAdminCommands =
+        arrayOf(
+            BotCommand("start", "开始"),
+            BotCommand("settings", "设置"),
+        )
 
     /**
      * 普通管理员可使用的命令
      */
-    val adminCommands = arrayOf(
-        BotCommand("start", "开始"),
-    )
+    val adminCommands =
+        arrayOf(
+            BotCommand("start", "开始"),
+        )
 
     /**
      * 普通用户可使用的命令
      */
-    val userCommands = arrayOf(
-        BotCommand("start", "开始"),
-        BotCommand("check_in", "签到"),
-    )
+    val userCommands =
+        arrayOf(
+            BotCommand("start", "开始"),
+            BotCommand("check_in", "签到"),
+        )
 
     /**
      * 设置 bot 命令
      */
     private fun sendCommands(user: UserTO) {
-        val command = when(user.role){
-            RoleTO.SYSTEM_ADMIN -> systemAdminCommands
-            RoleTO.ADMIN -> adminCommands
-            RoleTO.USER -> userCommands
-        }
-        val setMyCommandsRequest = SetMyCommands(*command).scope(
-            BotCommandsScopeChat(user.id),
-        )
+        val command =
+            when (user.role) {
+                RoleTO.SYSTEM_ADMIN -> systemAdminCommands
+                RoleTO.ADMIN -> adminCommands
+                RoleTO.USER -> userCommands
+            }
+        val setMyCommandsRequest =
+            SetMyCommands(*command).scope(
+                BotCommandsScopeChat(user.id),
+            )
         bot.execute(setMyCommandsRequest)
     }
 
-
     private fun createUser(userId: Long): UserTO {
-        val role = if (botProperties.creator == userId) {
-            RoleTO.SYSTEM_ADMIN
-        } else {
-            RoleTO.USER
-        }
+        val role =
+            if (botProperties.creator == userId) {
+                RoleTO.SYSTEM_ADMIN
+            } else {
+                RoleTO.USER
+            }
         val input = UserCreateInputTO(userId, role)
-       return userService.createUser(input)
+        return userService.createUser(input)
     }
 
-    private fun sendWelcomeMessage(user: UserTO    ) {
+    private fun sendWelcomeMessage(user: UserTO) {
         val text =
             """
             这里是主界面

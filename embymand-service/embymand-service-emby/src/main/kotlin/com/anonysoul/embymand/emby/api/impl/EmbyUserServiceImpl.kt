@@ -1,7 +1,7 @@
 package com.anonysoul.embymand.emby.api.impl
 
-import com.anonysoul.embymand.emby.api.EmbyUserService
 import com.anonysoul.embymand.common.BusinessException
+import com.anonysoul.embymand.emby.api.EmbyUserService
 import embyclient.ApiException
 import embyclient.api.UserServiceApi
 import embyclient.model.CreateUserByName
@@ -20,11 +20,15 @@ class EmbyUserServiceImpl(
 
     private val usernameExistsRegex = """^A user with the name .* already exists\.$""".toRegex()
 
-    override fun createUser(username: String, password: String?) {
+    override fun createUser(
+        username: String,
+        password: String?,
+    ) {
         try {
-            val createUserRequest = CreateUserByName().apply {
-                name = username
-            }
+            val createUserRequest =
+                CreateUserByName().apply {
+                    name = username
+                }
             val user = userServiceApi.postUsersNew(createUserRequest)
             val newPassword = password ?: randomString(defaultPasswordLength)
             updateUserPassword(user.id, newPassword)
@@ -36,14 +40,17 @@ class EmbyUserServiceImpl(
             }
             logger.error("创建用户失败：${e.responseBody}")
         }
-
     }
 
-    override fun updateUserPassword(userId: String, newPassword: String) {
-        val updateUserPasswordRequest = UpdateUserPassword().apply {
-            id = userId
-            newPw = newPassword
-        }
+    override fun updateUserPassword(
+        userId: String,
+        newPassword: String,
+    ) {
+        val updateUserPasswordRequest =
+            UpdateUserPassword().apply {
+                id = userId
+                newPw = newPassword
+            }
         userServiceApi.postUsersByIdPassword(updateUserPasswordRequest, userId)
     }
 

@@ -4,9 +4,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotNull
@@ -22,7 +19,6 @@ class User(
     @field:Id
     @field:Min(0)
     val id: Long,
-
 ) {
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER

@@ -2,8 +2,8 @@ package com.anonysoul.embymand.user.impl
 
 import com.anonysoul.embymand.user.Role
 import com.anonysoul.embymand.user.RoleTO
-import com.anonysoul.embymand.user.UserTO
 import com.anonysoul.embymand.user.User
+import com.anonysoul.embymand.user.UserTO
 import org.springframework.stereotype.Component
 
 @Component
