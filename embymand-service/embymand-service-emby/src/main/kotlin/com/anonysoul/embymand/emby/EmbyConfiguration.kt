@@ -1,6 +1,7 @@
 package com.anonysoul.embymand.emby
 
 import embyclient.ApiClient
+import embyclient.api.SessionsServiceApi
 import embyclient.api.UserServiceApi
 import embyclient.auth.ApiKeyAuth
 import org.springframework.beans.factory.annotation.Value
@@ -15,9 +16,10 @@ class EmbyConfiguration(
     val apiKey: String,
 ) {
     init {
-        val apiClient = ApiClient().apply {
-            setBasePath(endpoint)
-        }
+        val apiClient =
+            ApiClient().apply {
+                setBasePath(endpoint)
+            }
         val authentication = apiClient.getAuthentication("apikeyauth") as ApiKeyAuth
         authentication.apiKey = apiKey
         embyclient.Configuration.setDefaultApiClient(apiClient)
@@ -25,4 +27,7 @@ class EmbyConfiguration(
 
     @Bean
     fun userServiceApi() = UserServiceApi()
+
+    @Bean
+    fun sessionsServiceApi() = SessionsServiceApi()
 }
