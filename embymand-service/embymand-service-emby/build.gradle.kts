@@ -9,5 +9,6 @@ dependencies {
     implementation(project(":embymand-service:embymand-service-common"))
 
     implementation(Modules.springBootStarter)
+    implementation(Modules.jacksonDatabind)
     implementation(Modules.embyclient)
 }
