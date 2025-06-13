@@ -11,8 +11,11 @@ import com.pengrad.telegrambot.model.BotCommand
 import com.pengrad.telegrambot.model.botcommandscope.BotCommandsScopeChat
 import com.pengrad.telegrambot.model.request.ParseMode
 import com.pengrad.telegrambot.request.SendMessage
+import com.pengrad.telegrambot.request.SendPhoto
 import com.pengrad.telegrambot.request.SetMyCommands
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.event.EventListener
+import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import org.telegram.bot.BotProperties
 
@@ -21,12 +24,18 @@ class EnabledConsumer(
     private val bot: TelegramBot,
     private val botProperties: BotProperties,
     private val userService: UserService,
+    @Value("\${emby.title}")
+    val embyServerTitle: String,
+    @Value("\${emby.description}")
+    val embyServerDescription: String,
+    @Value("\${emby.urls}")
+    val embyServerUrls: List<String>,
 ) : BaseConsumer(bot) {
     @EventListener
     fun onEvent(event: EnabledEvent) {
         var user = userService.findById(event.userId)
         if (user == null) {
-            val messageId = sendInitializingMessage(event.userId, event.languageCode)
+            val messageId = sendInitializingMessage(event.userId)
             user = createUser(event.userId)
             deleteMessage(event.userId, messageId)
         }
@@ -35,10 +44,7 @@ class EnabledConsumer(
         sendWelcomeMessage(user)
     }
 
-    private fun sendInitializingMessage(
-        userId: Long,
-        languageCode: String,
-    ): Int {
+    private fun sendInitializingMessage(userId: Long): Int {
         val request = SendMessage(userId, "正在初始化...")
         val response = bot.execute(request)
         return response.message().messageId()
@@ -89,7 +95,7 @@ class EnabledConsumer(
 
     private fun createUser(userId: Long): UserTO {
         val role =
-            if (botProperties.creator == userId) {
+            if (botProperties.owner == userId) {
                 RoleTO.SYSTEM_ADMIN
             } else {
                 RoleTO.USER
@@ -99,11 +105,33 @@ class EnabledConsumer(
     }
 
     private fun sendWelcomeMessage(user: UserTO) {
-        val text =
-            """
-            这里是主界面
-            """.trimIndent()
-        val request = SendMessage(user.id, text).parseMode(ParseMode.Markdown)
+        val logo = ClassPathResource("images/emby.png").file
+        val text = generateWelcomeMessageContent()
+        val request =
+            SendPhoto(user.id, logo).apply {
+                caption(text)
+                parseMode(ParseMode.MarkdownV2)
+            }
         bot.execute(request)
+    }
+
+    private fun generateWelcomeMessageContent(): String {
+        return if (embyServerUrls.size == 1) {
+            """
+            ***$embyServerTitle***
+            >$embyServerDescription
+            
+            ***服务器地址：***`${embyServerUrls[0]}`
+            """.trimIndent()
+        } else {
+            val sb = StringBuilder()
+            sb.append("***$embyServerTitle***\n")
+            sb.append(">$embyServerDescription\n\n")
+            sb.append("***服务器地址：***\n")
+            embyServerUrls.forEach {
+                sb.append("● `$it`\n")
+            }
+            sb.toString()
+        }
     }
 }

@@ -2,10 +2,6 @@ package com.anonysoul.embymand.bot
 
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.UpdatesListener
-import com.pengrad.telegrambot.model.BotCommand
-import com.pengrad.telegrambot.model.botcommandscope.BotCommandsScopeChat
-import com.pengrad.telegrambot.request.SendMessage
-import com.pengrad.telegrambot.request.SetMyCommands
 import jakarta.validation.ValidatorFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.domain.EntityScan
@@ -33,8 +29,6 @@ class BotApp(
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     init {
-        setCommandForBotOwner()
-        setStateForBotOwner()
         listenEvent()
     }
 
@@ -64,28 +58,6 @@ class BotApp(
             }
             UpdatesListener.CONFIRMED_UPDATES_ALL
         }
-    }
-
-    /**
-     * 为 bot 的所有者设置命令
-     */
-    fun setCommandForBotOwner() {
-        val setMyCommandsRequest =
-            SetMyCommands(
-                BotCommand("start", "开始"),
-                BotCommand("settings", "设置"),
-            ).scope(
-                BotCommandsScopeChat(botProperties.creator),
-            )
-        bot.execute(setMyCommandsRequest)
-    }
-
-    /**
-     * bot 启动后，给 bot 的所有者发送一条消息
-     */
-    fun setStateForBotOwner() {
-        val stateMessage = SendMessage(botProperties.creator, "启动成功")
-        bot.execute(stateMessage)
     }
 }
 
