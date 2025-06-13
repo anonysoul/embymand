@@ -6,9 +6,9 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":embymand-core:embymand-user"))
+    implementation(project(":embymand-core:embymand-integral"))
     implementation(project(":embymand-infra:embymand-database"))
-    implementation(project(":embymand-service:embymand-service-common"))
+    api(project(":embymand-service:embymand-service-common"))
 
     implementation(Modules.springBootAutoConfigure)
     implementation(Modules.jakartaPersistence)

@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":embymand-service:embymand-service-common"))
+    api(project(":embymand-service:embymand-service-common"))
 
     implementation(Modules.springBootStarter)
     implementation(Modules.embyclient)

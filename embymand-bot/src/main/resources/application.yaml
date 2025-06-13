@@ -61,6 +61,15 @@ emby:
     prevent:
       - "none"
 
-search:
-  page:
-    size: 10
+embymand:
+  timezone: Asia/Shanghai
+  integral:
+    # 积分的昵称，可以自定义
+    unit: 积分
+    check-in:
+      # 每日签到得积分
+      # 此功能应该是公平的，即任何用户在任何时间签到，获得的积分应该是相等的。
+      score: 5
+  search:
+    page:
+      size: 10
