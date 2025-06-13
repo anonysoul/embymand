@@ -34,6 +34,9 @@ proxy:
 
 # emby 服务器配置信息
 emby:
+  # emby 服务器地址，展示给用户
+  url: ${EMBY_URL:http://localhost:8096}
+  # emby 服务器 api 地址，本项目与 emby 服务器交互
   endpoint: ${EMBY_ENDPOINT:http://localhost:8096/emby}
   api-key: ${EMBY_APIKEY:1234567890abcdefghijklmnopqrstuv}
   user:
