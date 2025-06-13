@@ -103,7 +103,7 @@ class EventParser(
         return null
     }
 
-    private val checkInCallBackQueryRegex = """^check_in$""".toRegex()
+    private val checkInCallBackQueryRegex = "^check_in$".toRegex()
 
     /**
      * 键盘消息
