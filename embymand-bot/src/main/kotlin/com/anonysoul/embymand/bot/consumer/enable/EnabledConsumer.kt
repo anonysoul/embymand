@@ -9,6 +9,8 @@ import com.anonysoul.embymand.user.UserTO
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.model.BotCommand
 import com.pengrad.telegrambot.model.botcommandscope.BotCommandsScopeChat
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup
 import com.pengrad.telegrambot.model.request.ParseMode
 import com.pengrad.telegrambot.request.SendMessage
 import com.pengrad.telegrambot.request.SendPhoto
@@ -40,8 +42,8 @@ class EnabledConsumer(
             deleteMessage(event.userId, messageId)
         }
 
-        sendCommands(user)
-        sendWelcomeMessage(user)
+        sendCommands(user.id, user.role)
+        sendWelcomeMessage(user.id, user.role)
     }
 
     private fun sendInitializingMessage(userId: Long): Int {
@@ -73,22 +75,24 @@ class EnabledConsumer(
     val userCommands =
         arrayOf(
             BotCommand("start", "开始"),
-            BotCommand("check_in", "签到"),
         )
 
     /**
      * 设置 bot 命令
      */
-    private fun sendCommands(user: UserTO) {
+    private fun sendCommands(
+        userId: Long,
+        role: RoleTO,
+    ) {
         val command =
-            when (user.role) {
+            when (role) {
                 RoleTO.SYSTEM_ADMIN -> systemAdminCommands
                 RoleTO.ADMIN -> adminCommands
                 RoleTO.USER -> userCommands
             }
         val setMyCommandsRequest =
             SetMyCommands(*command).scope(
-                BotCommandsScopeChat(user.id),
+                BotCommandsScopeChat(userId),
             )
         bot.execute(setMyCommandsRequest)
     }
@@ -104,13 +108,18 @@ class EnabledConsumer(
         return userService.createUser(input)
     }
 
-    private fun sendWelcomeMessage(user: UserTO) {
+    private fun sendWelcomeMessage(
+        userId: Long,
+        role: RoleTO,
+    ) {
         val logo = ClassPathResource("images/emby.png").file
         val text = generateWelcomeMessageContent()
+        val replyMarkup = generateWelcomeMessageReplyMarkup(role)
         val request =
-            SendPhoto(user.id, logo).apply {
+            SendPhoto(userId, logo).apply {
                 caption(text)
                 parseMode(ParseMode.MarkdownV2)
+                replyMarkup(replyMarkup)
             }
         bot.execute(request)
     }
@@ -132,6 +141,37 @@ class EnabledConsumer(
                 sb.append("● `$it`\n")
             }
             sb.toString()
+        }
+    }
+
+    private fun generateWelcomeMessageReplyMarkup(role: RoleTO): InlineKeyboardMarkup {
+        when (role) {
+            RoleTO.SYSTEM_ADMIN -> {
+                return InlineKeyboardMarkup(
+                    arrayOf(
+                        InlineKeyboardButton("签到").callbackData("check_in"),
+                    ),
+                    arrayOf(
+                        InlineKeyboardButton("设置").callbackData("settings"),
+                    ),
+                )
+            }
+
+            RoleTO.ADMIN -> {
+                return InlineKeyboardMarkup(
+                    arrayOf(
+                        InlineKeyboardButton("签到").callbackData("check_in"),
+                    ),
+                )
+            }
+
+            RoleTO.USER -> {
+                return InlineKeyboardMarkup(
+                    arrayOf(
+                        InlineKeyboardButton("签到").callbackData("check_in"),
+                    ),
+                )
+            }
         }
     }
 }

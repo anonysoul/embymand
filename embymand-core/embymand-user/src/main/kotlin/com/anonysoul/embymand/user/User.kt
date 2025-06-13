@@ -24,6 +24,12 @@ class User(
     var role: Role = Role.USER
         private set
 
+    /**
+     * emby 用户 id
+     */
+    var embyUserId: String? = null
+        private set
+
     @NotNull
     var enabled = true
         private set
@@ -37,6 +43,10 @@ class User(
 
     fun changeRole(role: Role) {
         this.role = role
+    }
+
+    fun setEmbyUserId(embyUserId: String?) {
+        this.embyUserId = embyUserId
     }
 
     fun enable() {

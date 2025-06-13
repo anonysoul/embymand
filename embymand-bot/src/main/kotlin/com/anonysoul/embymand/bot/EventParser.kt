@@ -1,5 +1,7 @@
 package com.anonysoul.embymand.bot
 
+import com.anonysoul.embymand.bot.consumer.checkin.event.CheckInEvent
+import com.anonysoul.embymand.bot.consumer.common.event.UnknownCallbackQueryEvent
 import com.anonysoul.embymand.bot.consumer.common.event.UnknownCommandEvent
 import com.anonysoul.embymand.bot.consumer.enable.event.EnabledEvent
 import com.pengrad.telegrambot.model.Chat
@@ -101,13 +103,33 @@ class EventParser(
         return null
     }
 
+    private val checkInCallBackQueryRegex = "^check_in$".toRegex()
+
     /**
      * 键盘消息
      *
      * update.callbackQuery() != null
      */
     fun parseCallbackQuery(update: Update): ApplicationEvent? {
-        return null
+        val callbackData = update.callbackQuery().data()
+        return when {
+            checkInCallBackQueryRegex.matches(callbackData) -> {
+                val chatId = update.callbackQuery().message().chat().id()
+                val callbackQueryId = update.callbackQuery().id()
+                val originMessageId = update.callbackQuery().message().messageId()
+                CheckInEvent(
+                    chatId,
+                    callbackQueryId,
+                    originMessageId,
+                )
+            }
+
+            else ->
+                UnknownCallbackQueryEvent(
+                    update.message().from().id(),
+                    update.callbackQuery().id(),
+                )
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":embymand-core:embymand-integral"))
     implementation(project(":embymand-core:embymand-user"))
     implementation(Modules.springBootAutoConfigure)
     implementation(Modules.jacksonDatabind)
