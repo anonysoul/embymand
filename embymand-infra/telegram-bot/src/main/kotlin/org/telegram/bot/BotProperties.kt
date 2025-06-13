@@ -7,7 +7,7 @@ import kotlin.properties.Delegates
 @Configuration
 @ConfigurationProperties(prefix = "bot.identity")
 class BotProperties {
-    var creator by Delegates.notNull<Long>()
+    var owner by Delegates.notNull<Long>()
     var token by Delegates.notNull<String>()
     var username by Delegates.notNull<String>()
 
