@@ -2,6 +2,7 @@ package com.anonysoul.embymand.emby.api.impl
 
 import com.anonysoul.embymand.common.BusinessException
 import com.anonysoul.embymand.emby.api.EmbyBaseService
+import com.anonysoul.embymand.emby.api.EmbyClientInfoTO
 import com.anonysoul.embymand.emby.api.EmbyUserService
 import embyclient.ApiException
 import embyclient.api.UserServiceApi
@@ -10,7 +11,6 @@ import embyclient.model.UpdateUserPassword
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import kotlin.concurrent.thread
 
 @Service
 class EmbyUserServiceImpl(
@@ -62,24 +62,12 @@ class EmbyUserServiceImpl(
         userServiceApi.deleteUsersById(userId)
     }
 
-    init {
-        thread {
-            while (true) {
-                Thread.sleep(3000)
-                try {
-//                    createUser("zhangwu", "123456")
-                    var userId = "f34c6ea3a9a84a4eb0a61d34a0da2ea4"
-                    xxxxx(userId)
-                } catch (e: Exception) {
-                    logger.info("")
-                }
-            }
-        }
-    }
-
-    fun xxxxx(userId: String) {
+    override fun listClientByUser(userId: String): List<EmbyClientInfoTO> {
         val sql = "SELECT DeviceName,ClientName, RemoteAddress FROM PlaybackActivity WHERE UserId = '$userId'"
-        customQuery(sql, true)
+        val result = customQuery(sql, true)
+        return result.data.results.map {
+            EmbyClientInfoTO(it[0], it[1], it[2])
+        }
     }
 
     private val allowedChars = ('a'..'z') + ('A'..'Z') + ('0'..'9')

@@ -21,4 +21,9 @@ interface EmbyUserService {
      * 删除用户
      */
     fun deleteUser(userId: String)
+
+    /**
+     * 获取用户登录过的客户端信息
+     */
+    fun listClientByUser(userId: String): List<EmbyClientInfoTO>
 }

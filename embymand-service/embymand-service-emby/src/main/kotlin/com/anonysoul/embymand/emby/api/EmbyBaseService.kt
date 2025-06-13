@@ -1,23 +1,32 @@
 package com.anonysoul.embymand.emby.api
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
+import embyclient.ApiResponse
 import embyclient.Configuration
 import embyclient.Pair
-import embyclient.model.UserDto
 
 abstract class EmbyBaseService {
     internal class CustomQueryParams(
-        @JsonProperty("CustomQueryString")
+        @SerializedName("CustomQueryString")
         val customQueryString: String,
-        @JsonProperty("ReplaceUserId")
+        @SerializedName("ReplaceUserId")
         val replaceUserId: Boolean,
+    )
+
+    protected class CustomQueryResponse(
+        @SerializedName("colums")
+        val colums: List<String>,
+        @SerializedName("results")
+        val results: List<List<String>>,
+        @SerializedName("message")
+        val message: String,
     )
 
     protected fun customQuery(
         sql: String,
         replaceUserId: Boolean,
-    ) {
+    ): ApiResponse<CustomQueryResponse> {
         val apiClient = Configuration.getDefaultApiClient()
         val apiUrl = "/user_usage_stats/submit_custom_query"
         val localVarQueryParams = mutableListOf<Pair>()
@@ -41,7 +50,7 @@ abstract class EmbyBaseService {
                 localVarAuthNames,
                 null,
             )
-        val localVarReturnType = object : TypeToken<UserDto?>() {}.type
-        apiClient.execute<UserDto?>(call, localVarReturnType)
+        val localVarReturnType = object : TypeToken<CustomQueryResponse?>() {}.type
+        return apiClient.execute(call, localVarReturnType)
     }
 }
