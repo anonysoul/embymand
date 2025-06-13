@@ -19,5 +19,8 @@ interface IntegralService {
      *
      * @param amount 积分数量（必须是正数）
      */
-    fun deduct(userId: Long, amount: Int): DeductResultTO
+    fun deduct(
+        userId: Long,
+        amount: Int,
+    ): DeductResultTO
 }

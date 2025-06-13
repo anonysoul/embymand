@@ -75,13 +75,15 @@ class EnabledConsumer(
     val userCommands =
         arrayOf(
             BotCommand("start", "开始"),
-            BotCommand("check_in", "签到"),
         )
 
     /**
      * 设置 bot 命令
      */
-    private fun sendCommands(userId: Long, role: RoleTO) {
+    private fun sendCommands(
+        userId: Long,
+        role: RoleTO,
+    ) {
         val command =
             when (role) {
                 RoleTO.SYSTEM_ADMIN -> systemAdminCommands
@@ -106,7 +108,10 @@ class EnabledConsumer(
         return userService.createUser(input)
     }
 
-    private fun sendWelcomeMessage(userId: Long, role: RoleTO) {
+    private fun sendWelcomeMessage(
+        userId: Long,
+        role: RoleTO,
+    ) {
         val logo = ClassPathResource("images/emby.png").file
         val text = generateWelcomeMessageContent()
         val replyMarkup = generateWelcomeMessageReplyMarkup(role)

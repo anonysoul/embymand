@@ -124,10 +124,11 @@ class EventParser(
                 )
             }
 
-            else -> UnknownCallbackQueryEvent(
-                update.message().from().id(),
-                update.callbackQuery().id(),
-            )
+            else ->
+                UnknownCallbackQueryEvent(
+                    update.message().from().id(),
+                    update.callbackQuery().id(),
+                )
         }
     }
 

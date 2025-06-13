@@ -1,6 +1,6 @@
 package com.anonysoul.embymand.integral
 
-data class CheckInResultTO (
+data class CheckInResultTO(
     /**
      * 今日签到排名
      */
@@ -12,5 +12,5 @@ data class CheckInResultTO (
     /**
      * 当前总积分
      */
-    val score: Int
+    val score: Int,
 )

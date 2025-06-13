@@ -28,7 +28,7 @@ class IntegralServiceImpl(
      * 每次签到获得的积分
      */
     @Value("\${embymand.integral.check-in.score:5}")
-    private val amountPreCheckIn: Int
+    private val amountPreCheckIn: Int,
 ) : IntegralService {
     private val zone = ZoneId.of(timezone)
 
@@ -43,11 +43,12 @@ class IntegralServiceImpl(
         // 今天的0点0分
         val todayOfStart = Instant.now().atZone(zone).withHour(0).withMinute(0).withSecond(0).withNano(0).toInstant()
         // 今天已经签到了吗
-        val alreadyCheckIn = integralHistoryRepository.existsByUserIdAndTypeAndCreatedAtAfter(
-            userId,
-            IntegralHistory.Type.CHECK_IN,
-            todayOfStart
-        )
+        val alreadyCheckIn =
+            integralHistoryRepository.existsByUserIdAndTypeAndCreatedAtAfter(
+                userId,
+                IntegralHistory.Type.CHECK_IN,
+                todayOfStart,
+            )
         if (alreadyCheckIn) {
             throw BusinessException("今天已经签到过了")
         }
@@ -66,7 +67,10 @@ class IntegralServiceImpl(
 
     @Transactional
     @Synchronized
-    override fun deduct(userId: Long, @Min(0) amount: Int): DeductResultTO {
+    override fun deduct(
+        userId: Long,
+        @Min(0) amount: Int,
+    ): DeductResultTO {
         val integral = integralRepository.findByUserId(userId) ?: throw IllegalArgumentException("用户不存在")
         integral.deduct(amount)
         integralRepository.save(integral)

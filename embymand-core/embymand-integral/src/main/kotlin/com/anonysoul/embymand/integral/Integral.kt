@@ -1,14 +1,8 @@
 package com.anonysoul.embymand.integral
 
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
-import jakarta.persistence.Table
 import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotNull
-import org.hibernate.annotations.CreationTimestamp
-import java.time.Instant
 
 /**
  * 积分

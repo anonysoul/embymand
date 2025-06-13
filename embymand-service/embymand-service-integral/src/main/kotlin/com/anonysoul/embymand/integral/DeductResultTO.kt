@@ -1,6 +1,6 @@
 package com.anonysoul.embymand.integral
 
-data class DeductResultTO (
+data class DeductResultTO(
     /**
      * 扣除的积分
      */
@@ -8,5 +8,5 @@ data class DeductResultTO (
     /**
      * 当前总积分
      */
-    val score: Int
+    val score: Int,
 )
