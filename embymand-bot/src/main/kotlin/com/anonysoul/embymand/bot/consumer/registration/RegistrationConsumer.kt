@@ -1,7 +1,8 @@
-package com.anonysoul.embymand.bot.consumer.enable
+package com.anonysoul.embymand.bot.consumer.registration.event
 
 import com.anonysoul.embymand.bot.consumer.BaseConsumer
 import com.anonysoul.embymand.bot.consumer.enable.event.EnabledEvent
+import com.anonysoul.embymand.registration.RegistrationCodeService
 import com.anonysoul.embymand.user.RoleTO
 import com.anonysoul.embymand.user.UserCreateInputTO
 import com.anonysoul.embymand.user.UserService
@@ -22,16 +23,10 @@ import org.springframework.stereotype.Component
 import org.telegram.bot.BotProperties
 
 @Component
-class EnabledConsumer(
+class RegistrationConsumer(
     private val bot: TelegramBot,
     private val botProperties: BotProperties,
-    private val userService: UserService,
-    @Value("\${emby.title}")
-    val embyServerTitle: String,
-    @Value("\${emby.description}")
-    val embyServerDescription: String,
-    @Value("\${emby.urls}")
-    val embyServerUrls: List<String>,
+    private val registrationCodeService: RegistrationCodeService,
 ) : BaseConsumer(bot) {
     @EventListener
     fun onEvent(event: EnabledEvent) {

@@ -4,6 +4,7 @@ import com.anonysoul.embymand.bot.consumer.checkin.event.CheckInEvent
 import com.anonysoul.embymand.bot.consumer.common.event.UnknownCallbackQueryEvent
 import com.anonysoul.embymand.bot.consumer.common.event.UnknownCommandEvent
 import com.anonysoul.embymand.bot.consumer.enable.event.EnabledEvent
+import com.anonysoul.embymand.bot.consumer.registration.event.GenerateRegistrationCodeRequestEvent
 import com.pengrad.telegrambot.model.Chat
 import com.pengrad.telegrambot.model.Update
 import org.slf4j.LoggerFactory
@@ -81,6 +82,10 @@ class EventParser(
                 EnabledEvent(
                     update.message().from().id(),
                     update.message().from().languageCode(),
+                )
+            update.message().text() == "/generate_registration_code" ->
+                GenerateRegistrationCodeRequestEvent(
+                    update.message().from().id(),
                 )
 
             else ->

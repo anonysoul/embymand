@@ -3,15 +3,16 @@ import com.anonysoul.embymand.build.dependencie.Modules
 plugins {
     id("embymand-base")
     id("embymand-codestyle")
-    id("embymand-jpa")
 }
 
 dependencies {
-    implementation(project(":embymand-core:embymand-integral"))
+    implementation(project(":embymand-infra:embymand-database"))
     implementation(project(":embymand-core:embymand-registration"))
-    implementation(project(":embymand-core:embymand-user"))
+    implementation(project(":embymand-service:embymand-service-common"))
+
     implementation(Modules.springBootAutoConfigure)
-    implementation(Modules.jacksonDatabind)
+    implementation(Modules.jakartaPersistence)
+    implementation(Modules.jakartaTransaction)
     implementation(Modules.jakartaValidation)
-    api(Modules.springDataJpa)
+    implementation(Modules.hibernateCore)
 }

@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":embymand-infra:telegram-bot"))
     implementation(project(":embymand-service:embymand-service-emby"))
     implementation(project(":embymand-service:embymand-service-integral"))
+    implementation(project(":embymand-service:embymand-service-registration"))
     implementation(project(":embymand-service:embymand-service-user"))
 
     runtimeOnly(Modules.postgresql)
